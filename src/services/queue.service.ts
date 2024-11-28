@@ -197,7 +197,7 @@ export class QueueService extends Singleton {
                     eachMessage: async ({ message }) => {
                         try {
                             const data = JSON.parse(message.value.toString());
-                            await instance.processMessage(null, message.topic, data);
+                            await instance.processMessage(null, message.value.toString(), data);
                         } catch (error) {
                             instance.logger.error(error.message);
                         }
@@ -232,10 +232,10 @@ export class QueueService extends Singleton {
                     params,
                 });
 
-                instance.redisClient.subscribe(message, async (channel, data) => {
+                instance.redisClient.subscribe(message, async (channel, data: any) => {
                     try {
                         const parsedData = JSON.parse(data);
-                        await instance.processMessage(null, channel, parsedData);
+                        await instance.processMessage(null, channel.toString(), parsedData);
                     } catch (error) {
                         instance.logger.error(error.message);
                     }

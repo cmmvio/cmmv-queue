@@ -5,5 +5,6 @@
         "outDir": "./dist/esm",
         "declaration": true,
         "declarationDir": "./dist/types"
-    }
+    },
+    "exclude": ["src/consumers", "src/consumers.module.ts", "src/sample.ts"]
 }
