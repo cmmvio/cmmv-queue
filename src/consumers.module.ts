@@ -1,9 +1,9 @@
 import { Module } from '@cmmv/core';
 
 import { 
-    SendEmailConsumer 
-} from './consumers/sendemail.consumer';
+    HelloWorldConsumer 
+} from './consumers/helloworld.consumer';
 
 export let ConsumersModule = new Module("consumers", {
-    providers: [SendEmailConsumer],
+    providers: [HelloWorldConsumer],
 });

@@ -7,7 +7,7 @@ import {
 import { QueueService } from "../services";
 
 @Channel("hello-world")
-export class SendEmailConsumer {
+export class HelloWorldConsumer {
     constructor(private readonly queueService: QueueService) {}
 
     @Consume("hello-world")
