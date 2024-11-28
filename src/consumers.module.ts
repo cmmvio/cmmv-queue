@@ -4,6 +4,13 @@ import {
     HelloWorldConsumer 
 } from './consumers/helloworld.consumer';
 
+import { 
+    SamplePubSubConsumer 
+} from './consumers/samplepubsub.consumer';
+
 export let ConsumersModule = new Module("consumers", {
-    providers: [HelloWorldConsumer],
+    providers: [
+        HelloWorldConsumer,
+        SamplePubSubConsumer
+    ],
 });

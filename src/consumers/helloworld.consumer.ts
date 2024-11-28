@@ -6,7 +6,7 @@ import {
 
 import { QueueService } from "../services";
 
-@Channel("hello-world")
+@Channel("hello-world", { durable: true })
 export class HelloWorldConsumer {
     constructor(private readonly queueService: QueueService) {}
 

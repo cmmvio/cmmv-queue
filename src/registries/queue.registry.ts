@@ -1,17 +1,44 @@
 export class QueueRegistry {
     public static queues = new Map<
         any,
-        { queueName: string; consumes: any[] }
+        { 
+            queueName: string; 
+            exchangeName: string; 
+            pubSub: boolean;
+            durable: boolean;
+            autoDelete: boolean;
+            exclusive: boolean;
+            consumes: any[] 
+        }
     >();
 
-    public static registerChannel(target: any, queueName: string) {
+    public static registerChannel(target: any, queueName: string, options: any) {
+        const pubSub = options?.pubSub === true;
+        const durable = options?.durable === true;
+        const autoDelete = options?.autoDelete === true;
+        const exclusive = options?.exclusive === true;
+        const exchangeName = options?.exchangeName || "exchange-name";
+
         if (!this.queues.has(target)) {
-            this.queues.set(target, { queueName, consumes: [] });
+            this.queues.set(target, { 
+                queueName, 
+                consumes: [],
+                pubSub,
+                durable,
+                autoDelete,
+                exclusive,
+                exchangeName 
+            });
         }
         else {
             this.queues.set(target, {
                 ...this.queues.get(target),
-                queueName
+                queueName,
+                pubSub,
+                durable,
+                autoDelete,
+                exclusive,
+                exchangeName 
             });
         } 
     }
@@ -26,7 +53,9 @@ export class QueueRegistry {
         if (!queue) {
             const queueName =
                 Reflect.getMetadata('channel_queue', target.constructor) || '';
-            this.registerChannel(target.constructor, queueName);
+            const options =
+                Reflect.getMetadata('channel_options', target.constructor) || {};
+            this.registerChannel(target.constructor, queueName, options);
             queue = this.queues.get(target.constructor);
         }
 
@@ -53,7 +82,9 @@ export class QueueRegistry {
         if (!queue) {
             const queueName =
                 Reflect.getMetadata('channel_queue', target.constructor) || '';
-            this.registerChannel(target.constructor, queueName);
+            const options =
+                Reflect.getMetadata('channel_options', target.constructor) || {};
+            this.registerChannel(target.constructor, queueName, options);
             queue = this.queues.get(target.constructor);
         }
 
@@ -99,7 +130,14 @@ export class QueueRegistry {
     public static clear() {
         QueueRegistry.queues = new Map<
             any,
-            { queueName: string; consumes: any[] }
+            { queueName: string; 
+                exchangeName: string; 
+                pubSub: boolean;
+                durable: boolean;
+                autoDelete: boolean;
+                exclusive: boolean;
+                consumes: any[] 
+            }
         >();
     }
 }

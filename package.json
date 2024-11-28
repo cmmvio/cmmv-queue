@@ -90,6 +90,8 @@
     "dependencies": {
         "@cmmv/core": "^0.6.5",
         "amqp-connection-manager": "^4.1.14",
-        "amqplib": "^0.10.5"
+        "amqplib": "^0.10.5",
+        "ioredis": "^5.4.1",
+        "kafkajs": "^2.2.4"
     }
 }

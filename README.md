@@ -103,6 +103,17 @@ export class HelloWorldConsumer {
 }
 ```
 
+### Options for ``@Channel``
+
+| Option        | Type    | Description                                      | Default         |
+|---------------|---------|--------------------------------------------------|-----------------|
+| `pubSub`      | boolean | Enables Pub/Sub messaging.                       | `false`         |
+| `exchangeName`| string  | Defines the exchange name for routing messages.  | `"exchange"`    |
+| `exclusive`   | boolean | Creates an exclusive queue.                      | `false`         |
+| `autoDelete`  | boolean | Deletes the queue when no consumers exist.       | `false`         |
+| `durable`     | boolean | Makes the queue durable (survives broker restarts). | `true`       |
+
+
 ## Registering Consumers
 
 Consumers should be registered in a dedicated module:
@@ -137,3 +148,45 @@ Registers a method to handle messages from the specified queue.
 ``@QueueMessage():`` Injects the received message payload.
 ``@QueueChannel():`` Injects the channel for the queue.
 ``@QueueConn():`` Injects the connection instance.
+
+## Pub/Sub
+
+The ``@cmmv/queue`` module now supports Pub/Sub messaging, allowing multiple subscribers to receive messages published to a specific topic. This is ideal for broadcast scenarios where messages need to be delivered to multiple consumers.
+
+To enable Pub/Sub, specify ``pubSub: true`` in the @Channel decorator options. You can also define an exchangeName for message routing.
+
+```typescript
+import { 
+    Channel, Consume, 
+    QueueMessage 
+} from "@cmmv/queue";
+
+import { QueueService } from "../services";
+
+@Channel("broadcast", { 
+    exchangeName: "broadcast",
+    pubSub: true 
+})
+export class SamplePubSubConsumer {
+    constructor(private readonly queueService: QueueService) {}
+
+    @Consume("broadcast")
+    public async OnReceiveMessage(@QueueMessage() message){
+        console.log("Pub/Sub message received: ", message);
+    }
+}
+```
+
+### Sending Broadcast Messages
+
+Use the ``publish`` method in ``QueueService`` to publish messages to the exchange:
+
+```typescript
+QueueService.publish("broadcast", "broadcast", { event: "user.created" });
+```
+
+* **Scalable Messaging:** Multiple subscribers can listen to the same topic.
+* **Broadcast Support:** Messages are delivered to all subscribed consumers.
+* **Flexible Routing:** Leverage exchange-based routing for advanced scenarios.
+
+This enhancement expands the capabilities of the ``@cmmv/queue`` module, making it a powerful choice for both traditional queue-based workflows and modern event-driven architectures.

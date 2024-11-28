@@ -1,9 +1,11 @@
 import { QueueRegistry } from '../registries/queue.registry';
+import { QueueOptions } from "../interfaces/queue.interface";
 
-export function Channel(queueName: string): ClassDecorator {
+export function Channel(queueName: string, options?: QueueOptions): ClassDecorator {
     return (target: object) => {
         Reflect.defineMetadata('channel_queue', queueName, target);
-        QueueRegistry.registerChannel(target, queueName);
+        Reflect.defineMetadata('channel_options', options, target);
+        QueueRegistry.registerChannel(target, queueName, options);
     };
 }
 
