@@ -1,3 +1,12 @@
+## [0.0.4](https://github.com/andrehrferreira/cmmv-queue/compare/v0.0.3...v0.0.4) (2024-11-29)
+
+
+### Bug Fixes
+
+* build pre release ([5bf3790](https://github.com/andrehrferreira/cmmv-queue/commit/5bf37900cc28f8e18dd6239d733f4e1d79166868))
+
+
+
 ## [0.0.3](https://github.com/andrehrferreira/cmmv-queue/compare/v0.0.2...v0.0.3) (2024-11-29)
 
 
