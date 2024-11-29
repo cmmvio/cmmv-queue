@@ -1,13 +1,10 @@
-import {
-    Singleton, Service, Logger,
-    Application, Config
-} from "@cmmv/core";
+import { Singleton, Service, Logger, Application, Config } from '@cmmv/core';
 
-import { QueueRegistry } from "../registries";
+import { QueueRegistry } from '../registries';
 
-import * as amqp from "amqp-connection-manager";
-import { Kafka, Consumer, Producer } from "kafkajs";
-import Redis from "ioredis";
+import * as amqp from 'amqp-connection-manager';
+import { Kafka, Consumer, Producer } from 'kafkajs';
+import Redis from 'ioredis';
 
 @Service()
 export class QueueService extends Singleton {
@@ -26,37 +23,47 @@ export class QueueService extends Singleton {
 
     public static async loadConfig(application: Application): Promise<void> {
         const instance = QueueService.getInstance();
-        const queueType = Config.get<string>('queue.type', "rabbitmq");
-        const queueUrl: string = Config.get<string>('queue.url', "");
+        const queueType = Config.get<string>('queue.type', 'rabbitmq');
+        const queueUrl: string = Config.get<string>('queue.url', '');
 
         try {
             switch (queueType) {
-                case "rabbitmq":
-                    if (queueUrl.startsWith("amqp:")) {
+                case 'rabbitmq':
+                    if (queueUrl.startsWith('amqp:')) {
                         instance.queueConn = amqp.connect(queueUrl);
-                        instance.queueConn.on('connect', () => instance.logger.log('RabbitMQ connected!'));
-                        instance.queueConn.on('disconnect', error => instance.logger.error(error.toString()));
+                        instance.queueConn.on('connect', () =>
+                            instance.logger.log('RabbitMQ connected!'),
+                        );
+                        instance.queueConn.on('disconnect', error =>
+                            instance.logger.error(error.toString()),
+                        );
 
                         await instance.setupRabbitMQ(application);
                     } else {
-                        throw new Error("Invalid RabbitMQ URL. Please check 'queue.url' configuration.");
+                        throw new Error(
+                            "Invalid RabbitMQ URL. Please check 'queue.url' configuration.",
+                        );
                     }
                     break;
 
-                case "kafka":
-                    const kafka = new Kafka({ brokers: queueUrl.split(",") });
+                case 'kafka':
+                    const kafka = new Kafka({ brokers: queueUrl.split(',') });
                     instance.kafkaProducer = kafka.producer();
                     await instance.kafkaProducer.connect();
 
-                    instance.logger.log("Kafka connected!");
+                    instance.logger.log('Kafka connected!');
 
                     await instance.setupKafka(application, kafka);
                     break;
 
-                case "redis":
+                case 'redis':
                     instance.redisClient = new Redis(queueUrl);
-                    instance.redisClient.on("connect", () => instance.logger.log("Redis connected!"));
-                    instance.redisClient.on("error", (error) => instance.logger.error(error.toString()));
+                    instance.redisClient.on('connect', () =>
+                        instance.logger.log('Redis connected!'),
+                    );
+                    instance.redisClient.on('error', error =>
+                        instance.logger.error(error.toString()),
+                    );
 
                     await instance.setupRedis(application);
                     break;
@@ -66,7 +73,7 @@ export class QueueService extends Singleton {
             }
         } catch (e) {
             instance.logger.error(e.message);
-            console.log(e);
+            console.error(e);
         }
     }
 
@@ -84,7 +91,7 @@ export class QueueService extends Singleton {
 
             const controllerInstance = new controllerClass(...instances);
 
-            metadata.consumes.forEach((consumeMetadata) => {
+            metadata.consumes.forEach(consumeMetadata => {
                 const { message, handlerName, params } = consumeMetadata;
 
                 instance.registeredConsumers.set(message, {
@@ -97,26 +104,37 @@ export class QueueService extends Singleton {
             const channelWrapper = instance.queueConn.createChannel({
                 json: true,
                 name: metadata.queueName,
-                setup: (channel) => {
-                    const promises = metadata.consumes.map((consume) => {
+                setup: channel => {
+                    const promises = metadata.consumes.map(consume => {
                         const pubSub = metadata.pubSub === true;
                         const exclusive = metadata.exclusive === true;
                         const autoDelete = metadata.autoDelete === true;
-                        const exchangeName = metadata.exchangeName || "exchange-name";
+                        const exchangeName =
+                            metadata.exchangeName || 'exchange-name';
 
-                        if(pubSub){
+                        if (pubSub) {
                             return Promise.all([
-                                channel.assertQueue(consume.message, { exclusive, autoDelete, durable: true }),
+                                channel.assertQueue(consume.message, {
+                                    exclusive,
+                                    autoDelete,
+                                    durable: true,
+                                }),
                                 channel.assertExchange(exchangeName, 'topic'),
                                 channel.prefetch(1),
-                                channel.bindQueue(consume.message, exchangeName, '#'),
-                                channel.consume(consume.message, async (msg) => {
+                                channel.bindQueue(
+                                    consume.message,
+                                    exchangeName,
+                                    '#',
+                                ),
+                                channel.consume(consume.message, async msg => {
                                     if (msg) {
                                         try {
                                             await instance.processMessage(
                                                 channel,
                                                 consume.message,
-                                                JSON.parse(msg.content.toString()),
+                                                JSON.parse(
+                                                    msg.content.toString(),
+                                                ),
                                             );
                                             channel.ack(msg); // Acknowledge the message
                                         } catch (error) {
@@ -128,19 +146,24 @@ export class QueueService extends Singleton {
                                             channel.ack(msg);
                                         }
                                     }
-                                })
+                                }),
                             ]);
-                        }
-                        else {
+                        } else {
                             return Promise.all([
-                                channel.assertQueue(consume.message, { exclusive, autoDelete, durable: true }),
-                                channel.consume(consume.message, async (msg) => {
+                                channel.assertQueue(consume.message, {
+                                    exclusive,
+                                    autoDelete,
+                                    durable: true,
+                                }),
+                                channel.consume(consume.message, async msg => {
                                     if (msg) {
                                         try {
                                             await instance.processMessage(
                                                 channel,
                                                 consume.message,
-                                                JSON.parse(msg.content.toString()),
+                                                JSON.parse(
+                                                    msg.content.toString(),
+                                                ),
                                             );
                                             channel.ack(msg); // Acknowledge the message
                                         } catch (error) {
@@ -157,7 +180,7 @@ export class QueueService extends Singleton {
                         }
                     });
 
-                    return Promise.all(promises);                                        
+                    return Promise.all(promises);
                 },
             });
 
@@ -166,7 +189,10 @@ export class QueueService extends Singleton {
         });
     }
 
-    private async setupKafka(application: Application, kafka: Kafka): Promise<void> {
+    private async setupKafka(
+        application: Application,
+        kafka: Kafka,
+    ): Promise<void> {
         const instance = QueueService.getInstance();
         const queues: any = QueueRegistry.getQueues();
 
@@ -180,7 +206,7 @@ export class QueueService extends Singleton {
 
             const controllerInstance = new controllerClass(...instances);
 
-            metadata.consumes.forEach(async (consumeMetadata) => {
+            metadata.consumes.forEach(async consumeMetadata => {
                 const { message, handlerName, params } = consumeMetadata;
 
                 instance.registeredConsumers.set(message, {
@@ -189,15 +215,24 @@ export class QueueService extends Singleton {
                     params,
                 });
 
-                const consumer = kafka.consumer({ groupId: `${metadata.queueName}-${message}` });
+                const consumer = kafka.consumer({
+                    groupId: `${metadata.queueName}-${message}`,
+                });
                 await consumer.connect();
-                await consumer.subscribe({ topic: message, fromBeginning: true });
+                await consumer.subscribe({
+                    topic: message,
+                    fromBeginning: true,
+                });
 
                 consumer.run({
                     eachMessage: async ({ message }) => {
                         try {
                             const data = JSON.parse(message.value.toString());
-                            await instance.processMessage(null, message.value.toString(), data);
+                            await instance.processMessage(
+                                null,
+                                message.value.toString(),
+                                data,
+                            );
                         } catch (error) {
                             instance.logger.error(error.message);
                         }
@@ -223,7 +258,7 @@ export class QueueService extends Singleton {
 
             const controllerInstance = new controllerClass(...instances);
 
-            metadata.consumes.forEach((consumeMetadata) => {
+            metadata.consumes.forEach(consumeMetadata => {
                 const { message, handlerName, params } = consumeMetadata;
 
                 instance.registeredConsumers.set(message, {
@@ -232,19 +267,30 @@ export class QueueService extends Singleton {
                     params,
                 });
 
-                instance.redisClient.subscribe(message, async (channel, data: any) => {
-                    try {
-                        const parsedData = JSON.parse(data);
-                        await instance.processMessage(null, channel.toString(), parsedData);
-                    } catch (error) {
-                        instance.logger.error(error.message);
-                    }
-                });
+                instance.redisClient.subscribe(
+                    message,
+                    async (channel, data: any) => {
+                        try {
+                            const parsedData = JSON.parse(data);
+                            await instance.processMessage(
+                                null,
+                                channel.toString(),
+                                parsedData,
+                            );
+                        } catch (error) {
+                            instance.logger.error(error.message);
+                        }
+                    },
+                );
             });
         });
     }
 
-    private async processMessage(channel: any, queueName: string, data: any): Promise<void> {
+    private async processMessage(
+        channel: any,
+        queueName: string,
+        data: any,
+    ): Promise<void> {
         const consumer = this.registeredConsumers.get(queueName);
 
         if (consumer) {
@@ -252,12 +298,16 @@ export class QueueService extends Singleton {
 
             const args = params
                 .sort((a, b) => a.index - b.index)
-                .map((param) => {
+                .map(param => {
                     switch (param.paramType) {
-                        case 'message': return data;
-                        case 'queueName': return queueName;
-                        case 'channel': return channel;
-                        default: return undefined;
+                        case 'message':
+                            return data;
+                        case 'queueName':
+                            return queueName;
+                        case 'channel':
+                            return channel;
+                        default:
+                            return undefined;
                     }
                 });
 
@@ -278,36 +328,36 @@ export class QueueService extends Singleton {
     ): Promise<boolean> {
         try {
             const instance = QueueService.getInstance();
-            const queueType = Config.get<string>('queue.type', "rabbitmq");
+            const queueType = Config.get<string>('queue.type', 'rabbitmq');
 
             if (instance.channels.has(channelName)) {
-                
-
                 switch (queueType) {
-                    case "rabbitmq": 
+                    case 'rabbitmq':
                         if (instance.channels.has(channelName)) {
-                            const channel = await instance.channels.get(channelName);            
+                            const channel =
+                                await instance.channels.get(channelName);
                             return await channel.sendToQueue(queueName, data);
                         }
-                    break;
-                    case "kafka":
+                        break;
+                    case 'kafka':
                         if (instance.kafkaProducer) {
                             await instance.kafkaProducer.send({
                                 topic: queueName,
-                                messages: [
-                                    { value: JSON.stringify(data) },
-                                ],
+                                messages: [{ value: JSON.stringify(data) }],
                             });
 
                             return true;
                         }
-                    break;
-                    case "redis":
+                        break;
+                    case 'redis':
                         if (instance.redisClient) {
-                            await instance.redisClient.rpush(queueName, JSON.stringify(data));
+                            await instance.redisClient.rpush(
+                                queueName,
+                                JSON.stringify(data),
+                            );
                             return true;
                         }
-                    break;
+                        break;
                     default:
                         throw new Error(`Unsupported queue type: ${queueType}`);
                 }
@@ -321,44 +371,51 @@ export class QueueService extends Singleton {
 
     public async publish(
         channelName: string,
-        exchangeName: string, 
+        exchangeName: string,
         data: any,
-        persistent: boolean = true
+        persistent: boolean = true,
     ) {
         try {
             const instance = QueueService.getInstance();
-            const queueType = Config.get<string>('queue.type', "rabbitmq");
+            const queueType = Config.get<string>('queue.type', 'rabbitmq');
 
             if (instance.channels.has(channelName)) {
                 const channel = await instance.channels.get(channelName);
 
                 switch (queueType) {
-                    case "rabbitmq":
+                    case 'rabbitmq':
                         if (instance.channels.has(channelName)) {
-                            const channel = await instance.channels.get(channelName);
-                            return channel.publish(exchangeName, '', Buffer.from(JSON.stringify(data)), {
-                                contentType: 'application/json',
-                                persistent,
-                            });
+                            const channel =
+                                await instance.channels.get(channelName);
+                            return channel.publish(
+                                exchangeName,
+                                '',
+                                Buffer.from(JSON.stringify(data)),
+                                {
+                                    contentType: 'application/json',
+                                    persistent,
+                                },
+                            );
                         }
-                    break;
-                    case "kafka":
+                        break;
+                    case 'kafka':
                         if (instance.kafkaProducer) {
                             await instance.kafkaProducer.send({
                                 topic: exchangeName,
-                                messages: [
-                                    { value: JSON.stringify(data) },
-                                ],
+                                messages: [{ value: JSON.stringify(data) }],
                             });
                             return true;
                         }
-                    break;
-                    case "redis":
+                        break;
+                    case 'redis':
                         if (instance.redisClient) {
-                            await instance.redisClient.publish(exchangeName, JSON.stringify(data));
+                            await instance.redisClient.publish(
+                                exchangeName,
+                                JSON.stringify(data),
+                            );
                             return true;
                         }
-                    break;
+                        break;
                     default:
                         throw new Error(`Unsupported queue type: ${queueType}`);
                 }
