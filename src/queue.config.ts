@@ -1,7 +1,7 @@
 import { ConfigSchema } from '@cmmv/core';
 
-export const AuthConfig: ConfigSchema = {
-    auth: {
+export const QueueConfig: ConfigSchema = {
+    type: {
         localRegister: {
             required: true,
             type: 'boolean',
