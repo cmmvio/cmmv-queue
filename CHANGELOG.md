@@ -1,3 +1,12 @@
+## [0.7.1](https://github.com/andrehrferreira/cmmv-queue/compare/v0.7.0...v0.7.1) (2024-12-04)
+
+
+### Bug Fixes
+
+* config schema ([2d0b5f9](https://github.com/andrehrferreira/cmmv-queue/commit/2d0b5f95ee78cdbe68dc8a179ab74f13c7951dc7))
+
+
+
 # [0.7.0](https://github.com/andrehrferreira/cmmv-queue/compare/v0.1.0...v0.7.0) (2024-12-04)
 
 
