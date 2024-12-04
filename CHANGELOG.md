@@ -1,3 +1,12 @@
+# [0.7.0](https://github.com/andrehrferreira/cmmv-queue/compare/v0.1.0...v0.7.0) (2024-12-04)
+
+
+### Bug Fixes
+
+* dependences ([0314ffc](https://github.com/andrehrferreira/cmmv-queue/commit/0314ffc2d27534d679de61e360ac6928245cd0cf))
+
+
+
 # [0.1.0](https://github.com/andrehrferreira/cmmv-queue/compare/v0.0.4...v0.1.0) (2024-12-04)
 
 
