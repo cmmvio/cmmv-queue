@@ -1,48 +1,16 @@
 import { ConfigSchema } from '@cmmv/core';
 
 export const QueueConfig: ConfigSchema = {
-    type: {
-        localRegister: {
-            required: true,
-            type: 'boolean',
-            default: true,
-        },
-        localLogin: {
-            required: true,
-            type: 'boolean',
-            default: true,
-        },
-        jwtSecret: {
+    queue: {
+        type: {
             required: true,
             type: 'string',
-            default: 'secret',
+            default: 'rabbitmq',
         },
-        expiresIn: {
+        url: {
             required: true,
-            type: 'number',
-            default: 3600,
-        },
-        google: {
-            required: false,
-            type: 'object',
-            default: {},
-            properties: {
-                clientID: {
-                    required: false,
-                    type: 'string',
-                    default: '',
-                },
-                clientSecret: {
-                    required: false,
-                    type: 'string',
-                    default: '',
-                },
-                callbackURL: {
-                    required: false,
-                    type: 'string',
-                    default: 'http://localhost:3000/auth/google/callback',
-                },
-            },
+            type: 'string',
+            default: 'amqp://guest:guest@localhost:5672/cmmv',
         },
     },
 };
