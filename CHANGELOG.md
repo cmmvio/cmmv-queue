@@ -1,3 +1,7 @@
+# [0.1.0](https://github.com/andrehrferreira/cmmv-queue/compare/v0.0.4...v0.1.0) (2024-12-04)
+
+
+
 ## [0.0.4](https://github.com/andrehrferreira/cmmv-queue/compare/v0.0.3...v0.0.4) (2024-11-29)
 
 
