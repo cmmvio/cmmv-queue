@@ -6,5 +6,10 @@
         "declaration": true,
         "declarationDir": "./dist/types"
     },
-    "exclude": ["src/consumers", "src/consumers.module.ts", "src/sample.ts"]
+    "exclude": [
+        "src/consumers", 
+        "src/consumers.module.ts", 
+        "sample/sample.ts",
+        "sample"
+    ]
 }

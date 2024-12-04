@@ -1,6 +1,6 @@
 import { Singleton, Service, Logger, Application, Config } from '@cmmv/core';
 
-import { QueueRegistry } from '../registries';
+import { QueueRegistry } from './queue.registry';
 
 import * as amqp from 'amqp-connection-manager';
 import { Kafka, Consumer, Producer } from 'kafkajs';
