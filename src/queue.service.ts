@@ -6,7 +6,7 @@ import * as amqp from 'amqp-connection-manager';
 import { Kafka, Consumer, Producer } from 'kafkajs';
 import Redis from 'ioredis';
 
-@Service()
+@Service('queue')
 export class QueueService extends Singleton {
     public logger: Logger = new Logger('QueueService');
     public queueConn: any;

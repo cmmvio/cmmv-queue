@@ -1,7 +1,7 @@
 {
     "name": "@cmmv/queue",
     "version": "0.7.1",
-    "description": "CMMV (@queue)",
+    "description": "Queue integration module for CMMV with support for Redis, Kafka and RabbitMQ",
     "main": "./dist/cjs/index.js",
     "module": "./dist/esm/index.js",
     "types": "./dist/types/index.d.ts",
@@ -49,9 +49,6 @@
     },
     "lint-staged": {
         "**/*.ts": [
-            "prettier --ignore-path ./.prettierignore --write"
-        ],
-        "packages/**/*.json": [
             "prettier --ignore-path ./.prettierignore --write"
         ]
     },
