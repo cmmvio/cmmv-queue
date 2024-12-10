@@ -1,3 +1,12 @@
+## [0.7.2](https://github.com/andrehrferreira/cmmv-queue/compare/v0.7.1...v0.7.2) (2024-12-10)
+
+
+### Bug Fixes
+
+* package, readme ([eee8099](https://github.com/andrehrferreira/cmmv-queue/commit/eee8099a4c1d009cabf86cfdffe1a3c045884a4b))
+
+
+
 ## [0.7.1](https://github.com/andrehrferreira/cmmv-queue/compare/v0.7.0...v0.7.1) (2024-12-04)
 
 
