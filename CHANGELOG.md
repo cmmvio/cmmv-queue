@@ -1,3 +1,12 @@
+## [0.7.3](https://github.com/cmmvio/cmmv-queue/compare/v0.7.2...v0.7.3) (2025-01-24)
+
+
+### Bug Fixes
+
+* repository ([003882f](https://github.com/cmmvio/cmmv-queue/commit/003882f12f925bd802020eb41975324dc164c3ad))
+
+
+
 ## [0.7.2](https://github.com/cmmvio/cmmv-queue/compare/v0.7.1...v0.7.2) (2024-12-10)
 
 
