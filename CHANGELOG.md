@@ -1,3 +1,12 @@
+## [0.7.4](https://github.com/cmmvio/cmmv-queue/compare/v0.7.3...v0.7.4) (2025-02-11)
+
+
+### Bug Fixes
+
+* release script ([898cb6a](https://github.com/cmmvio/cmmv-queue/commit/898cb6a1eb6c89df6aafe93fc87027a4044390d5))
+
+
+
 ## [0.7.3](https://github.com/cmmvio/cmmv-queue/compare/v0.7.2...v0.7.3) (2025-01-24)
 
 
