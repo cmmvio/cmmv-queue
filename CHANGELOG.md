@@ -1,3 +1,7 @@
+# [0.8.0](https://github.com/cmmvio/cmmv-queue/compare/v0.7.4...v0.8.0) (2025-02-17)
+
+
+
 ## [0.7.4](https://github.com/cmmvio/cmmv-queue/compare/v0.7.3...v0.7.4) (2025-02-11)
 
 
