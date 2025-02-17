@@ -1,27 +1,24 @@
 {
     "name": "@cmmv/queue",
-    "version": "0.7.4",
+    "version": "0.8.0",
     "description": "Queue integration module for CMMV with support for Redis, Kafka and RabbitMQ",
-    "main": "./dist/cjs/index.js",
-    "module": "./dist/esm/index.js",
-    "types": "./dist/types/index.d.ts",
+    "main": "./dist/cjs/main.js",
+    "module": "./dist/esm/main.js",
+    "types": "./dist/types/main.d.ts",
     "exports": {
         ".": {
-            "import": "./dist/esm/index.js",
-            "require": "./dist/cjs/index.js"
+            "import": "./dist/esm/main.js",
+            "require": "./dist/cjs/main.js"
         }
     },
     "scripts": {
-        "dev": "nodemon",
-        "build:cjs": "tsc --project tsconfig.cjs.json",
-        "build:esm": "tsc --project tsconfig.esm.json",
-        "build": "pnpm run build:cjs && pnpm run build:esm",
+        "dev": "cmmv run ./sample/sample.ts",
+        "build": "cmmv build",
+        "lint": "cmmv lint",
+        "release": "cmmv release",
+        "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
         "test": "vitest",
-        "prepare": "husky",
-        "lint": "pnpm run lint:spec",
-        "lint:fix": "pnpm run lint:spec -- --fix",
-        "release": "pnpm build && node release.js",
-        "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+        "prepare": "husky"
     },
     "keywords": [
         "cmmv",
@@ -45,7 +42,7 @@
         "access": "public"
     },
     "engines": {
-        "node": ">= 18.18.0 || >= 20.0.0"
+        "node": ">= 20.0.0"
     },
     "lint-staged": {
         "**/*.ts": [
@@ -53,44 +50,27 @@
         ]
     },
     "devDependencies": {
-        "@cmmv/http": "^0.7.3",
-        "@cmmv/server": "^0.6.3",
-        "@commitlint/cli": "^19.6.0",
-        "@commitlint/config-angular": "^19.6.0",
-        "@commitlint/config-conventional": "^19.6.0",
-        "@swc-node/core": "^1.13.3",
-        "@swc-node/register": "^1.10.9",
-        "@swc/core": "^1.10.0",
-        "@swc/helpers": "^0.5.15",
-        "@types/amqp-connection-manager": "^3.4.5",
-        "@types/node": "^22.10.1",
-        "@typescript-eslint/eslint-plugin": "^8.17.0",
-        "@typescript-eslint/parser": "^8.17.0",
-        "chalk": "^5.3.0",
+        "@cmmv/cli": "^0.5.9",
+        "@cmmv/http": "^0.8.18",
+        "@cmmv/server": "^0.8.7",
+        "@cmmv/view": "^0.8.18",
+        "@commitlint/cli": "^19.7.1",
+        "@commitlint/config-angular": "^19.7.1",
+        "@commitlint/config-conventional": "^19.7.1",
+        "@types/node": "^22.13.4",
         "conventional-changelog": "^6.0.0",
         "conventional-changelog-cli": "^5.0.0",
-        "enquirer": "^2.4.1",
-        "esbuild": "^0.23.1",
-        "esbuild-register": "^3.6.0",
-        "eslint": "^9.16.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-import": "^2.31.0",
-        "execa": "^9.5.1",
         "husky": "^9.1.7",
-        "lint-staged": "^15.2.10",
-        "nodemon": "^3.1.7",
-        "prettier": "^3.4.2",
-        "release-it": "^17.10.0",
-        "semver": "^7.6.3",
+        "lint-staged": "^15.4.3",
         "tslib": "^2.8.1",
-        "typescript": "^5.7.2",
-        "vitest": "^2.1.8"
+        "typescript": "^5.7.3",
+        "vitest": "^2.1.9"
     },
     "dependencies": {
-        "@cmmv/core": "^0.7.3",
+        "@cmmv/core": "^0.8.18",
         "amqp-connection-manager": "^4.1.14",
         "amqplib": "^0.10.5",
-        "ioredis": "^5.4.1",
+        "ioredis": "^5.5.0",
         "kafkajs": "^2.2.4"
     }
 }
