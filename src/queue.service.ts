@@ -1,6 +1,7 @@
 import { Singleton, Service, Logger, Application, Config } from '@cmmv/core';
 
 import { QueueRegistry } from './queue.registry';
+import { SynapAdapter } from './queue.synap';
 
 import * as amqp from 'amqp-connection-manager';
 import { Kafka, Consumer, Producer } from 'kafkajs';
@@ -15,6 +16,7 @@ export class QueueService extends Singleton {
     private kafkaProducer: Producer;
     private kafkaConsumers: Consumer[] = [];
     private redisClient: Redis;
+    private synapAdapter: SynapAdapter;
 
     private registeredConsumers: Map<
         string,
@@ -66,6 +68,19 @@ export class QueueService extends Singleton {
                     );
 
                     await instance.setupRedis(application);
+                    break;
+
+                case 'synap':
+                    const synapConfig = Config.get<any>('queue.synap', {});
+                    instance.synapAdapter = new SynapAdapter(
+                        queueUrl,
+                        synapConfig,
+                        instance.logger,
+                    );
+
+                    instance.logger.log('Synap connected!');
+
+                    await instance.setupSynap(application);
                     break;
 
                 default:
@@ -286,6 +301,61 @@ export class QueueService extends Singleton {
         });
     }
 
+    private async setupSynap(application: Application): Promise<void> {
+        const instance = QueueService.getInstance();
+        const queues: any = QueueRegistry.getQueues();
+
+        queues.forEach(async ([controllerClass, metadata]) => {
+            const paramTypes =
+                Reflect.getMetadata('design:paramtypes', controllerClass) || [];
+
+            const instances = paramTypes.map((paramType: any) =>
+                application.providersMap.get(paramType.name),
+            );
+
+            const controllerInstance = new controllerClass(...instances);
+
+            // Check if it's pub/sub or queue mode
+            if (metadata.pubSub) {
+                // Pub/Sub mode
+                const topics = metadata.consumes.map(
+                    (c: any) =>
+                        `${metadata.exchangeName || metadata.queueName}.${c.message}`,
+                );
+
+                instance.synapAdapter.subscribeToPubSub(
+                    topics,
+                    metadata.queueName,
+                    async (topic: string, data: any) => {
+                        const messageName = topic.split('.').pop();
+                        await instance.processMessage(null, messageName, data);
+                    },
+                );
+            } else {
+                // Queue mode
+                await instance.synapAdapter.createQueue(metadata.queueName);
+
+                metadata.consumes.forEach((consumeMetadata: any) => {
+                    const { message, handlerName, params } = consumeMetadata;
+
+                    instance.registeredConsumers.set(message, {
+                        instance: controllerInstance,
+                        handlerName,
+                        params,
+                    });
+
+                    instance.synapAdapter.startQueueConsumer(
+                        metadata.queueName,
+                        `consumer-${metadata.queueName}-${message}`,
+                        async (data: any) => {
+                            await instance.processMessage(null, message, data);
+                        },
+                    );
+                });
+            }
+        });
+    }
+
     private async processMessage(
         channel: any,
         queueName: string,
@@ -358,6 +428,14 @@ export class QueueService extends Singleton {
                             return true;
                         }
                         break;
+                    case 'synap':
+                        if (instance.synapAdapter) {
+                            return await instance.synapAdapter.publishToQueue(
+                                channelName,
+                                data,
+                            );
+                        }
+                        break;
                     default:
                         throw new Error(`Unsupported queue type: ${queueType}`);
                 }
@@ -414,6 +492,14 @@ export class QueueService extends Singleton {
                                 JSON.stringify(data),
                             );
                             return true;
+                        }
+                        break;
+                    case 'synap':
+                        if (instance.synapAdapter) {
+                            return await instance.synapAdapter.publishToPubSub(
+                                `${channelName}.${exchangeName}`,
+                                data,
+                            );
                         }
                         break;
                     default:

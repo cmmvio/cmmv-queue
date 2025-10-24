@@ -12,5 +12,10 @@ export const QueueConfig: ConfigSchema = {
             type: 'string',
             default: 'amqp://guest:guest@localhost:5672/cmmv',
         },
+        synap: {
+            required: false,
+            type: 'object',
+            default: {},
+        },
     },
 };
