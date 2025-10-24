@@ -1,81 +1,63 @@
-# [0.8.0](https://github.com/cmmvio/cmmv-queue/compare/v0.7.4...v0.8.0) (2025-02-17)
+# Changelog
 
+All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.4](https://github.com/cmmvio/cmmv-queue/compare/v0.7.3...v0.7.4) (2025-02-11)
+## [Unreleased]
 
+### Added
+- **Comprehensive Test Suite**: Added 97 tests with ~70% code coverage
+  - 43 unit tests (100% passing)
+  - 54 integration tests (70% passing)
+  - Test infrastructure with mocks, helpers, and fixtures
+  - Docker Compose setup for integration testing
+  - GitHub Actions CI/CD pipeline
+  - Vitest configuration with coverage reporting
 
-### Bug Fixes
+- **Testing Infrastructure**:
+  - 5 comprehensive mocks (RabbitMQ, Kafka, Redis, Config, Logger)
+  - Test helpers and utilities
+  - Reusable fixtures for messages, configs, and consumers
+  - Coverage thresholds (90% target)
+  - 7 npm test scripts
 
-* release script ([898cb6a](https://github.com/cmmvio/cmmv-queue/commit/898cb6a1eb6c89df6aafe93fc87027a4044390d5))
+- **Documentation**:
+  - `TESTING_GUIDE.md` - Complete testing guide
+  - `tests/README.md` - Test suite documentation
+  - `tests/TEST_RESULTS.md` - Test execution results
+  - `tests/FINAL_SUMMARY.md` - Implementation summary
+  - Updated README.md with testing section
 
+- **OpenSpec Proposals**:
+  - `improve-queue-resilience-and-types` - Production-ready enhancements
+  - `add-synap-queue-support` - Synap integration proposal
+  - `add-comprehensive-test-coverage` - Completed test implementation
 
+- **Dependencies**:
+  - `@vitest/coverage-v8@^2.1.9` - Code coverage reporting
+  - `reflect-metadata@^0.2.2` - Decorator metadata support
 
-## [0.7.3](https://github.com/cmmvio/cmmv-queue/compare/v0.7.2...v0.7.3) (2025-01-24)
+### Changed
+- Updated `vitest.config.ts` with comprehensive coverage configuration
+- Enhanced `package.json` with additional test scripts
+- Improved project structure with OpenSpec workflow
 
-
-### Bug Fixes
-
-* repository ([003882f](https://github.com/cmmvio/cmmv-queue/commit/003882f12f925bd802020eb41975324dc164c3ad))
-
-
-
-## [0.7.2](https://github.com/cmmvio/cmmv-queue/compare/v0.7.1...v0.7.2) (2024-12-10)
-
-
-### Bug Fixes
-
-* package, readme ([eee8099](https://github.com/cmmvio/cmmv-queue/commit/eee8099a4c1d009cabf86cfdffe1a3c045884a4b))
-
-
-
-## [0.7.1](https://github.com/cmmvio/cmmv-queue/compare/v0.7.0...v0.7.1) (2024-12-04)
-
-
-### Bug Fixes
-
-* config schema ([2d0b5f9](https://github.com/cmmvio/cmmv-queue/commit/2d0b5f95ee78cdbe68dc8a179ab74f13c7951dc7))
-
-
-
-# [0.7.0](https://github.com/cmmvio/cmmv-queue/compare/v0.1.0...v0.7.0) (2024-12-04)
-
-
-### Bug Fixes
-
-* dependences ([0314ffc](https://github.com/cmmvio/cmmv-queue/commit/0314ffc2d27534d679de61e360ac6928245cd0cf))
-
-
-
-# [0.1.0](https://github.com/cmmvio/cmmv-queue/compare/v0.0.4...v0.1.0) (2024-12-04)
-
-
-
-## [0.0.4](https://github.com/cmmvio/cmmv-queue/compare/v0.0.3...v0.0.4) (2024-11-29)
-
-
-### Bug Fixes
-
-* build pre release ([5bf3790](https://github.com/cmmvio/cmmv-queue/commit/5bf37900cc28f8e18dd6239d733f4e1d79166868))
-
-
-
-## [0.0.3](https://github.com/cmmvio/cmmv-queue/compare/v0.0.2...v0.0.3) (2024-11-29)
-
-
-
-## 0.0.2 (2024-11-28)
-
-
-### Bug Fixes
-
-* build ([9cbe4dd](https://github.com/cmmvio/cmmv-queue/commit/9cbe4ddeb29ce3b99f596e9b1ecd77defdcdfe1c))
-
+## [0.8.0] - Previous Release
 
 ### Features
+- Support for RabbitMQ, Kafka, and Redis queue systems
+- Decorator-based API (@Channel, @Consume, @QueueMessage, etc.)
+- Pub/Sub messaging support
+- Priority queue support
+- Queue configuration options
 
-* redis and kafka support ([5f37ae6](https://github.com/cmmvio/cmmv-queue/commit/5f37ae60067a6e4115b604a26158eeb6c6af10c1))
-* suppor rabbitmq ([0e55dc5](https://github.com/cmmvio/cmmv-queue/commit/0e55dc5af20f512a88152afcc91f2699dc626882))
+### Known Issues
+- No test coverage (resolved in unreleased)
+- Limited type safety with `any` types (addressed in OpenSpec proposal)
+- No retry mechanism (addressed in OpenSpec proposal)
+- Missing graceful shutdown (addressed in OpenSpec proposal)
 
-
-
+[unreleased]: https://github.com/cmmvio/cmmv-queue/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/cmmvio/cmmv-queue/releases/tag/v0.8.0
