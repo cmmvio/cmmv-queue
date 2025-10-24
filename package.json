@@ -17,7 +17,13 @@
         "lint": "cmmv lint",
         "release": "cmmv release",
         "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-        "test": "vitest",
+        "test": "vitest run",
+        "test:unit": "vitest run tests/unit",
+        "test:integration": "vitest run tests/integration",
+        "test:e2e": "vitest run tests/e2e",
+        "test:watch": "vitest watch",
+        "test:coverage": "vitest run --coverage",
+        "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
         "prepare": "husky"
     },
     "keywords": [
@@ -58,6 +64,7 @@
         "@commitlint/config-angular": "^19.7.1",
         "@commitlint/config-conventional": "^19.7.1",
         "@types/node": "^22.13.4",
+        "@vitest/coverage-v8": "^2.1.9",
         "conventional-changelog": "^6.0.0",
         "conventional-changelog-cli": "^5.0.0",
         "husky": "^9.1.7",
@@ -71,6 +78,7 @@
         "amqp-connection-manager": "^4.1.14",
         "amqplib": "^0.10.5",
         "ioredis": "^5.5.0",
-        "kafkajs": "^2.2.4"
+        "kafkajs": "^2.2.4",
+        "reflect-metadata": "^0.2.2"
     }
 }

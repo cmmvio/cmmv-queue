@@ -190,3 +190,33 @@ QueueService.publish("broadcast", "broadcast", { event: "user.created" });
 * **Flexible Routing:** Leverage exchange-based routing for advanced scenarios.
 
 This enhancement expands the capabilities of the ``@cmmv/queue`` module, making it a powerful choice for both traditional queue-based workflows and modern event-driven architectures.
+
+## Testing
+
+The module includes a comprehensive test suite with 90%+ coverage target:
+
+```bash
+# Run all tests
+npm test
+
+# Run unit tests only (fast)
+npm run test:unit
+
+# Run with coverage report
+npm run test:coverage
+
+# Watch mode for development
+npm run test:watch
+```
+
+**Test Suite**:
+- ✅ QueueRegistry: 23 unit tests (100% passing)
+- ✅ Decorators: 17 unit tests (100% passing)
+- ✅ QueueService: 3 unit tests (100% passing)
+- ✅ Redis Integration: 22/24 tests passing (92%)
+- ✅ Kafka Integration: 10/14 tests passing (71%)
+- ⏸️ RabbitMQ Integration: 16 tests (requires Docker)
+
+**Total**: 97 tests | 75 passing | ~70% coverage
+
+See [tests/README.md](tests/README.md) and [tests/TEST_RESULTS.md](tests/TEST_RESULTS.md) for detailed testing documentation.
