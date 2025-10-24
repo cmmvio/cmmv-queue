@@ -58,25 +58,25 @@
         ]
     },
     "devDependencies": {
-        "@cmmv/cli": "^0.5.9",
-        "@cmmv/http": "^0.8.18",
+        "@cmmv/cli": "^0.4.0",
+        "@cmmv/http": "^0.3.14",
         "@cmmv/server": "^0.8.7",
         "@cmmv/view": "^0.8.18",
         "@commitlint/cli": "^19.7.1",
         "@commitlint/config-angular": "^19.7.1",
         "@commitlint/config-conventional": "^19.7.1",
         "@types/node": "^22.13.4",
-        "@vitest/coverage-v8": "^2.1.9",
-        "conventional-changelog": "^6.0.0",
-        "conventional-changelog-cli": "^5.0.0",
+        "@vitest/coverage-v8": "^4.0.2",
+        "conventional-changelog": "^7.1.1",
+        "conventional-changelog-cli": "^4.1.0",
         "husky": "^9.1.7",
         "lint-staged": "^15.4.3",
         "tslib": "^2.8.1",
         "typescript": "^5.7.3",
-        "vitest": "^2.1.9"
+        "vitest": "^4.0.2"
     },
     "dependencies": {
-        "@cmmv/core": "^0.8.18",
+        "@cmmv/core": "^0.2.27",
         "@hivellm/synap": "0.2.0-beta.2",
         "amqp-connection-manager": "^4.1.14",
         "amqplib": "^0.10.5",
