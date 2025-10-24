@@ -11,6 +11,9 @@ importers:
       '@cmmv/core':
         specifier: ^0.8.18
         version: 0.8.36
+      '@hivellm/synap':
+        specifier: 0.2.0-beta.2
+        version: 0.2.0-beta.2
       amqp-connection-manager:
         specifier: ^4.1.14
         version: 4.1.15(amqplib@0.10.9)
@@ -600,6 +603,10 @@ packages:
 
   '@fastify/send@3.3.1':
     resolution: {integrity: sha512-6pofeVwaHN+E/MAofCwDqkWUliE3i++jlD0VH/LOfU8TJlCkMUSgKvA9bawDdVXxjve7XrdYMyDmkiYaoGWEtA==}
+
+  '@hivellm/synap@0.2.0-beta.2':
+    resolution: {integrity: sha512-+vWzE/AqjSeGaAjb34656A9FTP3eowlAoxFw32+t+e2DbA9LFLelAnsxTR99amK/d9g/XpraK7SGTWr76i6eKA==}
+    engines: {node: '>=18.0.0'}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3380,6 +3387,10 @@ packages:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
     hasBin: true
 
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
+
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
@@ -4150,6 +4161,11 @@ snapshots:
       fast-decode-uri-component: 1.0.1
       http-errors: 2.0.0
       mime: 3.0.0
+
+  '@hivellm/synap@0.2.0-beta.2':
+    dependencies:
+      rxjs: 7.8.2
+      uuid: 11.1.0
 
   '@humanfs/core@0.19.1': {}
 
@@ -6908,6 +6924,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@10.0.0: {}
+
+  uuid@11.1.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
 
